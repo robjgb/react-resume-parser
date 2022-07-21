@@ -21,8 +21,7 @@
     "resume-parser": "^1.1.0",
     "simple-resume-parser": "^1.1.8",
     "toastify": "^2.0.1",
-    "web-vitals": "^2.1.4",
-    "homepage": "https://robjgb.github.io/react-resume-parser/"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "predeploy": "npm run build",
