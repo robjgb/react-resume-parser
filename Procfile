@@ -1,1 +1,1 @@
-web: node --chdir ./src server.js
+web: node server.js
