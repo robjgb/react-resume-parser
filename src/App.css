@@ -65,10 +65,13 @@ body{
   font-family: var(--font-raleway);
   font-weight: 500;
   padding-right: 1rem;
-
+  color: black;
   outline: none;
-  color: #a1a1a1;
   background: white;
+}
+
+.search input::placeholder {
+  color: #a1a1a1;
 }
 
 .search img {

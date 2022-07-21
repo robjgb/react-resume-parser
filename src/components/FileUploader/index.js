@@ -7,6 +7,9 @@ import { useEffect } from 'react';
 export const FileUploader = ({onSuccess}) => {
     const  [files, setFiles] = useState([]);
     var [isLoading, setIsLoading] = useState(false);
+    function Spinner(){
+        return <div id="spinner"></div>
+    }
 
     useEffect (()=>{
         var fileInput = document.querySelector('input[type=file]');
@@ -60,23 +63,26 @@ export const FileUploader = ({onSuccess}) => {
         }
         else{
             toast.error('File not supported')
+            setIsLoading(false);
         }
     };
 
-    return (
+    return (<>
             <form method="post" action="#" id="#" onSubmit={onSubmit}>                 
                 <div className="form-group files">
                     <label htmlFor="fileUpload">
                         <div className = "text">
                             <p> Drag & drop resumes here in .PDF format</p>
-                            <img className="icon" src="https://img.icons8.com/material/96/000000/pdf-2--v1.png" alt=""></img>
+                            {isLoading? <Spinner></Spinner>:
+                            <img className="icon" src="https://img.icons8.com/material/96/000000/pdf-2--v1.png" alt=""></img>}
                             <p> Or, <span> Upload Files</span> </p>
                             <p id="filename"></p>
                             </div>
                         <input type="file" onChange={onInputChange} id="fileUpload" disabled={isLoading} multiple></input>
                         </label>
-                    <button className = "submitBtn"> Upload </button>
+                    <button disabled={isLoading} className = "submitBtn"> Upload </button>
                 </div>     
         </form>
+        </>
     )
 };

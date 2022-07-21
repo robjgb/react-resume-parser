@@ -1,6 +1,37 @@
 import React from 'react';
 
+function getIndicesOf(searchStr, str, caseSensitive) {
+  var searchStrLen = searchStr.length;
+  if (searchStrLen === 0) {
+      return [];
+  }
+  var startIndex = 0, index, indices = [];
+  if (!caseSensitive) {
+      str = str.toLowerCase();
+      searchStr = searchStr.toLowerCase();
+  }
+  while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+      indices.push(index);
+      startIndex = index + searchStrLen;
+  }
+  return indices;
+}
+
 const findLinks = (str, substr) => {
+    if(!str.includes('https://')){
+      var insert = 'https://';
+      var indices = getIndicesOf("github", str) 
+      var extra = 0;
+
+      for(let i = 0; i < indices.length; i++){
+        console.log(indices[i] + extra)
+        str = [str.slice(0, indices[i] + extra), insert, str.slice(indices[i] + extra)].join('')
+        extra = extra + 8
+      }
+      let pos2 = str.indexOf("linkedin"); 
+      str = [str.slice(0, pos2), insert, str.slice(pos2)].join('')
+      console.log(str)
+    }
     var name = str.split(/(?=https)/)
     var result = ""
     for(let i = 0; i < name.length; i++) {

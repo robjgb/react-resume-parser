@@ -6,41 +6,49 @@ import 'react-toastify/dist/ReactToastify.css';
 import ResumeCard from './components/resumeCard';
 
 function App() {
-  
+  const [query, setQuery] = useState("")
   const [showFU, setFU] = useState(true)
-  const [files, setFiles] = useState([])
   var [resumes, updateResumes] = useState([])
+  let fileData
+
+  const getFilteredItems = (query, items) => {
+    query = query.replace(/\s/g, '');
+    query = query.toLowerCase()
+
+    if(!query && !query.includes(',')) {
+      return items;
+    }
+    var filteredItems = []
+
+    if(!query.includes(',')){
+      console.log(query)
+      filteredItems = items.filter(resume => 
+        (resume.hasOwnProperty('name') && resume.name.toLowerCase().replace(/\s/g, '').includes(query)) || (resume.hasOwnProperty('skills') && resume.skills.toLowerCase().replace(/\s/g, '').includes(query)) || (resume.hasOwnProperty('experience') && resume.experience.toLowerCase().replace(/\s/g, '').includes(query)) || (resume.hasOwnProperty('education') && resume.education.toLowerCase().replace(/\s/g, '').includes(query)))  
+    }
+
+    return filteredItems
+    }
+
+  function handleHomeClick(){
+    window.location.reload(false);
+  }
 
   const onSuccess = (data) => {
-    var fileData = data[1]
+    fileData = data[1]
+    console.log(fileData)
     setFU(data[0])
-    setFiles(fileData)
-
+ 
     console.log("UPLOAD SUCCESS")
 
-    const fileList = []; 
-
-    for(let i = 0; i < fileData.length; i++){
-      fileList.push(fileData[i])      
-      fetch(`./JSON-data/${fileList[i].name}.txt.json`).then(response => {
-        return response.json()
-      }) //parse json
-      .then(value => {
+    for (const [key, value] of Object.entries(fileData)) {
         updateResumes(arr => [...arr, value])
-        console.log(resumes[1])
-      })
     }
   }
 
+  var filteredResumes = getFilteredItems(query, resumes)
+
   const Caption = () => (
     <p className="barText" id="barText2"> Scan resumes and filter by keywords. </p>
-  )
-
-  const SearchBar = () => (
-    <div className='search'>
-      <input placeholder='Filter using keywords. . .' onChange={()=> {}}/>
-      <img src= "https://img.icons8.com/ios-glyphs/90/000000/search-client.png" alt='search' onClick={()=> {}}/>
-       </div>
   )
 
   const FileUpload = () => (
@@ -50,7 +58,7 @@ function App() {
   const ResumeView = () => (
     <div className='container1'>
       {
-      resumes.map((resume)=>(
+      filteredResumes.map((resume, index)=>(
         <ResumeCard resume = {resume}/>
       )) 
      }
@@ -59,12 +67,16 @@ function App() {
 
   return (
     <div className="App">
-
       <ToastContainer/>
 
       <div className="bar"> 
-        <p className="barText" id="barText1">Resume Parser</p>
-        {showFU ? <Caption /> : <SearchBar/> }
+        <p className="barText" id="barText1" onClick={handleHomeClick} style={{cursor:'pointer'}}>Resume Parser</p>
+        {showFU ? <Caption /> : 
+            <div className='search'>
+            <input type ="text" placeholder='Filter using keywords. . .' onChange={event => setQuery(event.target.value)}/>
+            <img src= "https://img.icons8.com/ios-glyphs/90/000000/search-client.png" alt='search'/>
+             </div>
+        }
       </div>
 
       <div className='container'> 
