@@ -3,7 +3,7 @@ const fileUpload = require('express-fileupload');
 const pdfParse = require('pdf-parse');
 const fs = require('fs');
 const ResumeParser = require('simple-resume-parser');
-
+const path = require('path');
 const app = express();
 
 app.use(express.static('public'));
@@ -23,21 +23,21 @@ app.post("/extract-text", (req, res) => {
     for(let i = 0; i < files.length; i++){
         pdfParse(files[i]).then(result => {
 
-            fs.writeFile(__dirname + '/../../src/server/public' + `${files[i].name}` + '.txt', result.text, function(err) {
+            fs.writeFile(__dirname + '/../../react-resume-parser/src/server/' + `${files[i].name}` + '.txt', result.text, function(err) {
                 flag: 'w'
                 if(err) {
                     return console.log(err);
                 }
                 
-                const resume = new ResumeParser(__dirname + '/../../src/server/public' + `${files[i].name}` + '.txt');
+                const resume = new ResumeParser(__dirname + '/../../react-resume-parser/src/server/' + `${files[i].name}` + '.txt');
 
-                resume.parseToFile(__dirname + '/../../src/server/public') //output subdirectory
+                resume.parseToFile(__dirname + '/../../react-resume-parser/src/server/public') //output subdirectory
                 .then(file => {
                     secondFunction()
                     function firstFunction(){
-                      var data = require(__dirname + `/../../src/server/public/${files[i].name}` + '.txt.json')
+                      var data = require(__dirname + `/../../react-resume-parser/src/server/public/${files[i].name}` + '.txt.json')
                       JSONfiles["key" + counter] = data;
-                      fs.unlink('./public/' + `${files[i].name}` + '.txt', (err) => {
+                      fs.unlink(__dirname + '/../../react-resume-parser/src/server/' + `${files[i].name}` + '.txt', (err) => {
                         if (err) throw err;
                       }) 
                       counter++
@@ -70,8 +70,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..build', 'index.html'));
 });
 
-app.listen(8000, ()=> {
-    console.log('App is running on port 8000')
+app.listen(5000, ()=> {
+    console.log('App is running on port 5000')
 })
 
 

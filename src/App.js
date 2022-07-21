@@ -9,7 +9,6 @@ function App() {
   const [query, setQuery] = useState("")
   const [showFU, setFU] = useState(true)
   var [resumes, updateResumes] = useState([])
-  let fileData
 
   const getFilteredItems = (query, items) => {
     query = query.replace(/\s/g, '');
@@ -34,10 +33,9 @@ function App() {
   }
 
   const onSuccess = (data) => {
-    fileData = data[1]
-    console.log(fileData)
+    const fileData = data[1]
     setFU(data[0])
- 
+    console.log(data[1])
     console.log("UPLOAD SUCCESS")
 
     for (const [key, value] of Object.entries(fileData)) {

@@ -49,7 +49,7 @@ export const FileUploader = ({onSuccess}) => {
 
         if(dataLength > 0){
             setIsLoading(true);
-            axios.post('//localhost:8000/extract-text', formData)
+            axios.post('//localhost:5000/extract-text', formData)
             .then(response => {
                 toast.success('Upload Success');
                 var data = [false, response.data]
